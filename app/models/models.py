@@ -45,7 +45,7 @@ class Policy(Base):
     __tablename__ = "policies"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     brand_id: Mapped[int] = mapped_column(ForeignKey("brands.id"))
-    kind: Mapped[str | None] = mapped_column(String(64), nullable=True)  # privacy/return/etc
+    kind: Mapped[str | None] = mapped_column(String(64), nullable=True) 
     url: Mapped[str | None] = mapped_column(String(1024), nullable=True)
     content: Mapped[str | None] = mapped_column(Text, nullable=True)
 
@@ -86,3 +86,20 @@ class About(Base):
     content: Mapped[str | None] = mapped_column(Text, nullable=True)
 
     brand = relationship("Brand", back_populates="about")
+
+
+# app/models/model.py
+# from sqlalchemy.orm import relationship, Mapped, mapped_column
+# from sqlalchemy import Integer, String, Text, ForeignKey
+# from app.models.db import Base
+
+# ... (existing model definitions: Brand, Product, FAQ, Policy, Social, Contact, Link, About)
+
+class Competitor(Base):
+    __tablename__ = "competitors"
+    __table_args__ = {'extend_existing': True}  # Allow redefinition of the table
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    website_url: Mapped[str] = mapped_column(String(512), nullable=False)  # The brand's website
+    competitor_website: Mapped[str] = mapped_column(String(512), nullable=False)  # Competitor's website
+
+    brand = relationship("Brand", primaryjoin="Brand.website==Competitor.website_url", foreign_keys=[website_url])

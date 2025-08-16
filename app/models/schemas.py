@@ -71,5 +71,7 @@ class BrandContext(BaseModel):
 
 class FetchRequest(BaseModel):
     website_url: str
-    persist: bool = False
+    persist: bool = True
     with_competitors: bool = False
+
+
